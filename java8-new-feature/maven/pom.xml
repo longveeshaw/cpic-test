@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.primeton.eos</groupId>
+	<artifactId>eos-parent</artifactId>
+	<version>1.0.1</version>
+	<!-- 
+	<version>1.0.0-SNAPSHOT</version>
+	 -->
+	<packaging>pom</packaging>
+	<distributionManagement>
+		<repository>
+			<id>oss-sonatype-org-release</id>
+			<name>maven-center</name>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
+		</repository>
+		<!-- 
+		<repository>
+			<id>oss-sonatype-org-snapshot</id>
+			<name>maven-center</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+		 -->
+	</distributionManagement>
+	<scm>
+		<url>https://github.com/primetoninc/eos-boot</url>
+		<connection>https://github.com/primetoninc/eos-boot.git</connection>
+		<developerConnection>https://github.com/primetoninc/eos-boot</developerConnection>
+	</scm>
+	<developers>
+		<developer>
+			<name>EOS Team</name>
+			<email>team@primeton.com</email>
+			<url>https://github.com/primetoninc/eos-boot</url>
+		</developer>
+	</developers>
+</project>
