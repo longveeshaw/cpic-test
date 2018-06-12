@@ -237,7 +237,7 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		
 		RouteLocator locator = builder.routes().route("path_route", r -> r.path("/dynaimc_route").uri("https://www.baidu.com")).build();
 		
-		routeLocator.getRoutes().then(Mono.just(locator)).cache();
+		routeLocator.getRoutes().then(Mono.just(locator.getRoutes())).cache();
 
 		return Boolean.TRUE;
 	}
