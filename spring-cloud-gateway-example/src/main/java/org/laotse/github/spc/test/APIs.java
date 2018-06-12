@@ -25,7 +25,10 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RootUriTemplateHandler;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
+import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory;
@@ -35,6 +38,7 @@ import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.gateway.route.RouteDefinitionWriter;
 import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.gateway.support.NotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
@@ -198,6 +202,9 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 				.reduce(new HashMap<>(), this::putItem);
 	}
 	
+	@Autowired
+	RouteLocatorBuilder builder;
+	
 	@GetMapping("/test")
 	public boolean test() {
 		// uri=http://httpbin.org:80 predicates:='["Host=**.apiaddrequestheader.org", "Path=/headers"]' filters:='["AddRequestHeader=X-Request-ApiFoo, ApiBar"]'
@@ -206,28 +213,32 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		{
 			PredicateDefinition predicate = new PredicateDefinition();
 			Map<String, String> args = new HashMap<>();
-			predicate.setName("Host");
-			predicate.setArgs(args);
-			args.put("Host", "localhost");
-			predicates.add(predicate);
-			
-			predicate = new PredicateDefinition();
 			args = new HashMap<>();
 			predicate.setName("Path");
 			predicate.setArgs(args);
-			args.put("Path", "/s");
+			args.put("Path", "/sss");
 			predicates.add(predicate);
-		}
-		
+		}	
+		List<FilterDefinition> filters = new ArrayList<>();
+			
 		RouteDefinition definition = new RouteDefinition();
-		definition.setId("test_route");
+		definition.setId("path_route");
 		definition.setUri(URI.create("http://www.baidu.com"));
-		//definition.setOrder(Ordered.LOWEST_PRECEDENCE);
+		definition.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		definition.setPredicates(predicates);
+		definition.setFilters(filters);
 		
 		Mono<RouteDefinition> route = Mono.just(definition);
-		save("test_route", route);
 		
+		// save("path_route", route);
+		
+		// routeLocator.getRoutes().then(route);
+		// routeLocator.getRoutes().then(route).cache();
+		
+		RouteLocator locator = builder.routes().route("path_route", r -> r.path("/dynaimc_route").uri("https://www.baidu.com")).build();
+		
+		routeLocator.getRoutes().then(Mono.just(locator)).cache();
+
 		return Boolean.TRUE;
 	}
 	
