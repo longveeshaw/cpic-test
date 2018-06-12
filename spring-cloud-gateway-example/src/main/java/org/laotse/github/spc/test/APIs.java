@@ -53,7 +53,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * @author Spencer Gibb
+ * Copy from GatewayControllerEndpoint
+ * 
  */
 @RestController
 @RequestMapping("/gateway-apis")
@@ -197,7 +198,8 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 				.reduce(new HashMap<>(), this::putItem);
 	}
 	
-	public void test() {
+	@GetMapping("/test")
+	public boolean test() {
 		// uri=http://httpbin.org:80 predicates:='["Host=**.apiaddrequestheader.org", "Path=/headers"]' filters:='["AddRequestHeader=X-Request-ApiFoo, ApiBar"]'
 		
 		List<PredicateDefinition> predicates = new ArrayList<>();
@@ -218,12 +220,15 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		}
 		
 		RouteDefinition definition = new RouteDefinition();
-		definition.setId("test");
+		definition.setId("test_route");
 		definition.setUri(URI.create("http://www.baidu.com"));
 		//definition.setOrder(Ordered.LOWEST_PRECEDENCE);
 		definition.setPredicates(predicates);
 		
+		Mono<RouteDefinition> route = Mono.just(definition);
+		save("test_route", route);
 		
+		return Boolean.TRUE;
 	}
 	
 }
