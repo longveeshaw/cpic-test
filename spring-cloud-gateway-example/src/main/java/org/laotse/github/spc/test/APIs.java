@@ -26,7 +26,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RootUriTemplateHandler;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -52,7 +51,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -235,10 +233,14 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		// routeLocator.getRoutes().then(route);
 		// routeLocator.getRoutes().then(route).cache();
 		
-		RouteLocator locator = builder.routes().route("path_route", r -> r.path("/dynaimc_route").uri("https://www.baidu.com")).build();
+		// RouteLocator locator = builder.routes().route("path_route", r -> r.path("/dynaimc_route").uri("https://www.baidu.com")).build();
 		
-		routeLocator.getRoutes().then(Mono.just(locator.getRoutes())).cache();
-
+		// routeLocator.getRoutes().then(Mono.just(locator.getRoutes())).cache();
+		
+//		Function
+//		routeLocator.getRoutes().ma;
+		
+		
 		return Boolean.TRUE;
 	}
 	
