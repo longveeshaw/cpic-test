@@ -31,6 +31,7 @@ import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory;
+import org.springframework.cloud.gateway.handler.predicate.PathRoutePredicateFactory;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.route.RouteDefinition;
@@ -50,6 +51,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.adapter.DefaultServerWebExchange;
+import org.springframework.web.util.pattern.PathPatternParser;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -228,7 +232,10 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		
 		Mono<RouteDefinition> route = Mono.just(definition);
 		
-		// save("path_route", route);
+		save("path_route", route);
+		
+		
+		this.publisher.publishEvent(new RefreshRoutesEvent(this));
 		
 		// routeLocator.getRoutes().then(route);
 		// routeLocator.getRoutes().then(route).cache();
@@ -236,9 +243,6 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		// RouteLocator locator = builder.routes().route("path_route", r -> r.path("/dynaimc_route").uri("https://www.baidu.com")).build();
 		
 		// routeLocator.getRoutes().then(Mono.just(locator.getRoutes())).cache();
-		
-//		Function
-//		routeLocator.getRoutes().ma;
 		
 		
 		return Boolean.TRUE;
