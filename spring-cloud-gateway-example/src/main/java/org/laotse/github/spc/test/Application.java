@@ -30,12 +30,7 @@ public class Application {
 		//@formatter:off
 		return builder.routes()
 				.route("path_route", r -> r.path("/get")
-//						.uri("http://httpbin.org"))
-						.uri("https://www.baidu.com"))
-//				.route("path_route", r -> r.path("/s")
-//						.uri("https://www.baidu.com"))
-//				.route("path_route", r -> r.path("/primeton")
-//						.uri("http://www.primeton.com"))
+						.uri("http://httpbin.org"))
 				.route("host_route", r -> r.host("*.myhost.org")
 						.uri("http://httpbin.org"))
 				.route("rewrite_route", r -> r.host("*.rewrite.org")

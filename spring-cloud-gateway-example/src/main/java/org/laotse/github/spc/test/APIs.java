@@ -218,29 +218,22 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		
 		List<PredicateDefinition> predicates = new ArrayList<>();
 		{
-			PredicateDefinition predicate = new PredicateDefinition();
-			Map<String, String> args = new HashMap<>();
-			args = new HashMap<>();
-			predicate.setName("Path");
-			predicate.setArgs(args);
-			args.put("Path", "/s");
+			PredicateDefinition predicate = new PredicateDefinition("Path=/s");
 			predicates.add(predicate);
+			// ...
 		}	
 		List<FilterDefinition> filters = new ArrayList<>();
 			
 		RouteDefinition definition = new RouteDefinition();
-		definition.setId("path_route_1");
+		//definition.setId("path_route_1"); // will be overwrite on save
 		definition.setUri(URI.create("http://www.baidu.com"));
 		definition.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		definition.setPredicates(predicates);
 		definition.setFilters(filters);
 		
-		routeDefinitionWriter.save(Mono.just(definition));
-		
 		save("path_route_1", Mono.just(definition));
 		
-		
-		//this.publisher.publishEvent(new RefreshRoutesEvent(this));
+		this.publisher.publishEvent(new RefreshRoutesEvent(this));
 		//this.publisher.publishEvent(new RefreshEvent(this, new RefreshRoutesEvent(this), "Refresh Route"));
 		
 		// routeLocator.getRoutes().then(route);
