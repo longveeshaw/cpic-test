@@ -174,7 +174,11 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 //			Mono.just(ResponseEntity.created(URI.create("/routes/"+id)).build())
 //		));
 		
-		this.routeDefinitionWriter.save(route).subscribe(f -> {
+		this.routeDefinitionWriter.save(route.map(r ->  {
+			r.setId(id);
+			log.info("Saving route: " + route);
+			return r;
+		})).subscribe(f -> {
 			System.out.println(f);
 		});
 		return Mono.just(ResponseEntity.created(URI.create("/routes/"+id)).build());
