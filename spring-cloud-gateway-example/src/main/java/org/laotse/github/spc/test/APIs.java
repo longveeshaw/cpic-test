@@ -66,18 +66,20 @@ public class APIs implements ApplicationEventPublisherAware {
 
 	private RouteDefinitionLocator routeDefinitionLocator;
 	private List<GlobalFilter> globalFilters;
-	private List<GatewayFilterFactory> GatewayFilters;
+	@SuppressWarnings("rawtypes")
+	private List<GatewayFilterFactory> gatewayFilters;
 	private RouteDefinitionWriter routeDefinitionWriter;
 	private RouteLocator routeLocator;
 	private ApplicationEventPublisher publisher;
 
+	@SuppressWarnings("rawtypes")
 	public APIs(RouteDefinitionLocator routeDefinitionLocator, List<GlobalFilter> globalFilters,
-									 List<GatewayFilterFactory> GatewayFilters, RouteDefinitionWriter routeDefinitionWriter,
+									 List<GatewayFilterFactory> gatewayFilters, RouteDefinitionWriter routeDefinitionWriter,
 									 RouteLocator routeLocator) {
 		this.routeDefinitionLocator = routeDefinitionLocator;
 		this.globalFilters = globalFilters;
-		this.GatewayFilters = GatewayFilters;
-		this.routeDefinitionWriter = routeDefinitionWriter;
+		this.gatewayFilters = gatewayFilters;
+		this.routeDefinitionWriter = routeDefinitionWriter; // InMemoryRouteDefinitionRepository
 		this.routeLocator = routeLocator;
 	}
 
@@ -101,7 +103,7 @@ public class APIs implements ApplicationEventPublisherAware {
 
 	@GetMapping("/routefilters")
 	public Mono<HashMap<String, Object>> routefilers() {
-		return getNamesToOrders(this.GatewayFilters);
+		return getNamesToOrders(this.gatewayFilters);
 	}
 
 	private <T> Mono<HashMap<String, Object>> getNamesToOrders(List<T> list) {
@@ -166,13 +168,13 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 */
 	@PostMapping("/routes/{id}")
 	public Mono<ResponseEntity<Void>> save(@PathVariable String id, @RequestBody Mono<RouteDefinition> route) {
-//		return this.routeDefinitionWriter.save(route.map(r ->  {
-//			r.setId(id);
-//			log.info("Saving route: " + route);
-//			return r;
-//		})).then(Mono.defer(() ->
-//			Mono.just(ResponseEntity.created(URI.create("/routes/"+id)).build())
-//		));
+		//		return this.routeDefinitionWriter.save(route.map(r ->  {
+		//			r.setId(id);
+		//			log.info("Saving route: " + route);
+		//			return r;
+		//		})).then(Mono.defer(() ->
+		//			Mono.just(ResponseEntity.created(URI.create("/routes/"+id)).build())
+		//		));
 		
 		this.routeDefinitionWriter.save(route.map(r ->  {
 			r.setId(id);
