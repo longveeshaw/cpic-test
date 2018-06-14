@@ -31,7 +31,6 @@ import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory;
-import org.springframework.cloud.gateway.handler.predicate.PathRoutePredicateFactory;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.route.RouteDefinition;
@@ -51,9 +50,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.adapter.DefaultServerWebExchange;
-import org.springframework.web.util.pattern.PathPatternParser;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -92,7 +88,7 @@ public class APIs implements ApplicationEventPublisherAware {
 
 	// TODO: Add uncommited or new but not active routes endpoint
 
-	@PostMapping("/refresh")
+	@GetMapping("/refresh")
 	public Mono<Void> refresh() {
 	    this.publisher.publishEvent(new RefreshRoutesEvent(this));
 		return Mono.empty();
@@ -170,13 +166,18 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 */
 	@PostMapping("/routes/{id}")
 	public Mono<ResponseEntity<Void>> save(@PathVariable String id, @RequestBody Mono<RouteDefinition> route) {
-		return this.routeDefinitionWriter.save(route.map(r ->  {
-			r.setId(id);
-			log.debug("Saving route: " + route);
-			return r;
-		})).then(Mono.defer(() ->
-			Mono.just(ResponseEntity.created(URI.create("/routes/"+id)).build())
-		));
+//		return this.routeDefinitionWriter.save(route.map(r ->  {
+//			r.setId(id);
+//			log.info("Saving route: " + route);
+//			return r;
+//		})).then(Mono.defer(() ->
+//			Mono.just(ResponseEntity.created(URI.create("/routes/"+id)).build())
+//		));
+		
+		this.routeDefinitionWriter.save(route).subscribe(f -> {
+			System.out.println(f);
+		});
+		return Mono.just(ResponseEntity.created(URI.create("/routes/"+id)).build());
 	}
 
 	@DeleteMapping("/routes/{id}")
@@ -218,24 +219,25 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 			args = new HashMap<>();
 			predicate.setName("Path");
 			predicate.setArgs(args);
-			args.put("Path", "/sss");
+			args.put("Path", "/s");
 			predicates.add(predicate);
 		}	
 		List<FilterDefinition> filters = new ArrayList<>();
 			
 		RouteDefinition definition = new RouteDefinition();
-		definition.setId("path_route");
+		definition.setId("path_route_1");
 		definition.setUri(URI.create("http://www.baidu.com"));
 		definition.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		definition.setPredicates(predicates);
 		definition.setFilters(filters);
 		
-		Mono<RouteDefinition> route = Mono.just(definition);
+		routeDefinitionWriter.save(Mono.just(definition));
 		
-		save("path_route", route);
+		save("path_route_1", Mono.just(definition));
 		
 		
-		this.publisher.publishEvent(new RefreshRoutesEvent(this));
+		//this.publisher.publishEvent(new RefreshRoutesEvent(this));
+		//this.publisher.publishEvent(new RefreshEvent(this, new RefreshRoutesEvent(this), "Refresh Route"));
 		
 		// routeLocator.getRoutes().then(route);
 		// routeLocator.getRoutes().then(route).cache();
