@@ -9,7 +9,35 @@
 		<dependency>
 			<groupId>com.netflix.zuul</groupId>
 			<artifactId>zuul-core</artifactId>
-			<version>2.1.2</version>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.blitz4j</groupId>
+			<artifactId>blitz4j</artifactId>
+			<version>1.37.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.governator</groupId>
+			<artifactId>governator-test</artifactId>
+			<version>1.17.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.governator</groupId>
+			<artifactId>governator-test-junit</artifactId>
+			<version>1.17.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
