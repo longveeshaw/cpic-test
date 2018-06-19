@@ -1,0 +1,49 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: MicroApp_10001
+
+#management.endpoints.enabled-by-default=true
+#management.endpoint.gateway.enabled=true
+
+logging:level:
+  org.springframework.cloud.gateway: TRACE
+  org.springframework.http.server.reactive: DEBUG
+  org.springframework.web.reactive: DEBUG
+  reactor.ipc.netty: DEBUG
+    
+debug: true
+
+# The Gateway can be configured to create routes based on services registered with a DiscoveryClient 
+# compatible service registry.
+# To enable this, set spring.cloud.gateway.discovery.locator.enabled=true and make sure a DiscoveryClient
+# implementation is on the classpath and enabled (such as Netflix Eureka, Consul or Zookeeper).
+#spring.cloud.gateway.discovery.locator.enabled=true
+
+eureka:
+  server:
+    enable-self-preservation: false       # 关闭自我保护模式（缺省为打开）
+    eviction-interval-timer-in-ms: 1000   # 续期时间，即扫描失效服务的间隔时间（缺省为60*1000ms）
+  instance:
+    # https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaInstanceConfigBean.java
+    nonSecurePortEnabled: true
+    statusPageUrlPath: /info
+    healthCheckUrlPath: /health
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true                       # 设置微服务调用地址为IP优先（缺省为false）
+    lease-renewal-interval-in-seconds: 5          # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 15      # 发呆时间，即服务续约到期时间（缺省为90s）
+  client:
+    healthcheck:
+      enabled: true
+    # https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaClientConfigBean.java
+    serviceUrl:
+      defaultZone: http://yoga:8080/eureka/
+    # 设置是否从注册中心获取注册信息（缺省true）
+    # 因为这是一个单点的EurekaServer，不需要同步其它EurekaServer节点的数据，故设为false
+    fetch-registry: false
+    # 设置是否将自己作为客户端注册到注册中心（缺省true）
+    # 这里为不需要（查看@EnableEurekaServer注解的源码，会发现它间接用到了@EnableDiscoveryClient）
+    register-with-eureka: false

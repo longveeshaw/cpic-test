@@ -23,9 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.event.RefreshRoutesEvent;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -59,7 +62,7 @@ import reactor.core.publisher.Mono;
  * 
  */
 @RestController
-@RequestMapping("/gateway-apis")
+@RequestMapping("/gateway/discovery")
 public class APIs implements ApplicationEventPublisherAware {
 
 	private static final Log log = LogFactory.getLog(APIs.class);
@@ -238,6 +241,16 @@ http POST :8080/admin/gateway/routes/apiaddreqhead uri=http://httpbin.org:80 pre
 		this.publisher.publishEvent(new RefreshRoutesEvent(this));
 		
 		return Boolean.TRUE;
+	}
+	
+	@Resource
+	private DiscoveryClient client;
+
+	@GetMapping("/")
+	public List<String> getInstances() {
+		List<String> services = client.getServices();
+		System.out.println(services);
+		return services;
 	}
 	
 }
