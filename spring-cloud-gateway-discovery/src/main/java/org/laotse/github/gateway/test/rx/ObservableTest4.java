@@ -37,11 +37,16 @@ public class ObservableTest4 {
 		}
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws Exception {
 
 		Observable.from(new String[] { "This", "is", "RxJava" }).flatMap(e -> Observable.create(subscriber -> {
+			try {
+				TimeUnit.SECONDS.sleep(1L);
+			} catch (InterruptedException t) {
+				subscriber.onError(t);
+			}
 			subscriber.onNext(e.toUpperCase());
-			// subscriber.onCompleted();
+			subscriber.onCompleted();
 			// subscriber.onError(new Exception("Sorry, ..."));
 		})).subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread()).subscribe(next -> {
 			System.out.println("[" + Thread.currentThread().getName() + "] " + next);
