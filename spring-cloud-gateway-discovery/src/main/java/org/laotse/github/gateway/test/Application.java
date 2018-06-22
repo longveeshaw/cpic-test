@@ -47,6 +47,8 @@ public class Application {
 		return builder.routes()
 				.route("path_route", r -> r.path("/get")
 						.uri("http://httpbin.org"))
+				.route("path_route_lb", r -> r.path("/lb")
+						.uri("lb://matchYourEurekaServiceId"))
 				.route("host_route", r -> r.host("*.myhost.org")
 						.uri("http://httpbin.org"))
 				.route("rewrite_route", r -> r.host("*.rewrite.org")
