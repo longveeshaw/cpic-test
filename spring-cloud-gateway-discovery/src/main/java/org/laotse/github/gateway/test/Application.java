@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,9 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @ComponentScan("org.laotse.github.gateway.test")
 public class Application {
 	
-	@GetMapping("/health")
+	@PostMapping(value = "/health")
 	public String health() {
-		return "200";
+		return "[200] " + System.currentTimeMillis();
 	}
 	
 	@GetMapping("/info")
@@ -76,21 +77,32 @@ public class Application {
 		return new RedisRateLimiter(1, 2);
 	}
 
-	@Bean
+	//@Bean
 	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
 		System.out.println("############################################################");
 		return http.httpBasic().and()
 				.authorizeExchange()
 				.pathMatchers("/anything/**").authenticated()
 				.anyExchange().permitAll()
-				.and()
+				.and().csrf().disable()
+				.build();
+	}
+	
+	@Bean
+	SecurityWebFilterChain springWebFilterChain1(ServerHttpSecurity http) throws Exception {
+		System.out.println("############################################################");
+		return http.httpBasic().and()
+				.authorizeExchange()
+				.pathMatchers("/**").permitAll()
+				.anyExchange().permitAll()
+				.and().csrf().disable()
 				.build();
 	}
 
-	@Bean
+	//@Bean
 	public MapReactiveUserDetailsService reactiveUserDetailsService() {
 		// UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build();
-		UserDetails user = User.withUsername("user").password("password").roles("USER").build();
+		UserDetails user = User.withUsername("admin").password("123456").roles("USER").build();
 		return new MapReactiveUserDetailsService(user);
 	}
 
