@@ -29,8 +29,8 @@ eureka:
   instance:
     # https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-eureka-client/src/main/java/org/springframework/cloud/netflix/eureka/EurekaInstanceConfigBean.java
     nonSecurePortEnabled: true
-    statusPageUrlPath: /info
-    healthCheckUrlPath: /health
+    statusPageUrlPath: /actuator/info
+    healthCheckUrlPath: /actuator/health
     instance-id: ${spring.application.name}:${server.port}
     prefer-ip-address: true                       # 设置微服务调用地址为IP优先（缺省为false）
     lease-renewal-interval-in-seconds: 5          # 心跳时间，即服务续约间隔时间（缺省为30s）
@@ -48,7 +48,7 @@ eureka:
     # 这里为不需要（查看@EnableEurekaServer注解的源码，会发现它间接用到了@EnableDiscoveryClient）
     register-with-eureka: false
 
-security:
-  user:
-    name: admin
-    password: 123456
+#security:
+#  user:
+#    name: admin
+#    password: 123456
