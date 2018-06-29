@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue Life Cycle</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+<div id="app">{{ message }}
+  <button v-on:click='nowTime'>Time Now</button>
+  <button v-on:click='destroyApp'>Destroy App</button>
+</div>
+
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      message: "Vue"
+    },
+    methods: {
+      nowTime: function() {
+        this.message = new Date().toLocaleString()
+      },
+      destroyApp: function () { 
+        this.$destroy()
+      }
+    },
+    beforeCreate: function() {
+      console.log("创建之前")
+    },
+    created: function() {
+      console.log("创建完成", this.message)
+    },
+    beforeMount: function() {
+      console.log("挂载之前", this.message)
+    },
+    mounted: function() {
+      console.log("挂载完成", this.message)
+    },
+    beforeUpdate: function() {
+      console.log("更新之前", this.message)
+    },
+    updated: function() {
+      console.log("更新完成", this.message)
+    },
+    destroyed: function() {
+      console.log("销毁应用", this.message)
+    },
+    beforeDestroy: function() {
+      console.log("销毁之前", this.message)
+    },
+    activated: function() {
+      console.log("activated", this.message)
+    },
+    deactivated: function() {
+      console.log("deactivated", this.message)
+    },
+    errorCaptured: function(err, vm, info) {
+      console.log("errorCaptured", err, vm, info)
+    }
+  })
+</script>
+</body>
+
+</html>
