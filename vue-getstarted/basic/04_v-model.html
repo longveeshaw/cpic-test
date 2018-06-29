@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>function message() {
+      alert(1)
+    }</script>
+</head>
+
+<body>
+  <div id="app">
+    <p>{{ message }}</p>
+    <input v-model="message" id="message" />
+    <button v-on:click="click">click</button>
+  </div>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!'
+      },
+      methods: {
+        click: function() {
+          alert(this.message + " - (this.message)\n" + document.getElementById('message').value + " - (document.getElementById('message').value)")
+        }
+      }
+    })
+
+    
+  </script>
+</body>
+
+</html>
