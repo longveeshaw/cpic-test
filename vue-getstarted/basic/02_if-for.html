@@ -15,17 +15,48 @@
     <input type="button" v-if="!seen" value="显示" onclick="setShow(true)" />
     <input type="button" v-if="seen" value="隐藏" onclick="setShow(false)" />
   </div>
+  <hr/>
+  <div id="app-2">
+    <ol>
+      <li v-for="todo in todos">
+        {{ todo.text }}
+      </li>
+    </ol>
+    <input type="text" name="project" id="project" value="New Project" />
+    <input type="button" value="添加" onclick="addProject()" />
+    <input type="button" value="清空" onclick="clearProject()" />
+  </div>
   <script>
-  var app = new Vue({
-    el: '#app',
-    data: {
-      seen: true
-    }
-  })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        seen: true
+      }
+    })
 
-  function setShow(ok) {
-    app.seen = ok
-  }
+    var app2 = new Vue({
+      el: '#app-2',
+      data: {
+        todos: [
+          { text: '学习 JavaScript' },
+          { text: '学习 Vue' },
+          { text: '整个牛项目' }
+        ]
+      }
+    })
+
+    function setShow(ok) {
+      app.seen = ok
+    }
+
+    function addProject() {
+      app2.todos.push({ text: document.getElementById('project').value })
+      document.getElementById('project').value = 'New Project ' + new Date().toLocaleString()
+    }
+
+    function clearProject() {
+      app2.todos = []
+    }
   </script>
 </body>
 
