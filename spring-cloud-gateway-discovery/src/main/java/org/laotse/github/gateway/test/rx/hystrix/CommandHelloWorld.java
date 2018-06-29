@@ -22,14 +22,20 @@ public class CommandHelloWorld extends HystrixCommand<String> {
 	}
 
 	public static void main(String[] args) throws Exception {
+		CommandHelloWorld chw = new CommandHelloWorld("Tom");
+		System.out.println(chw.execute());
+		
 		CommandHelloWorld cmd = new CommandHelloWorld("Bob");
 		Future<String> s = cmd.queue();
 		System.out.println(s.get());
 		
-		Observable<String> x = new CommandHelloWorld("Bob").observe();
+		Observable<String> x = new CommandHelloWorld("Tom").observe();
 		System.out.println(x.subscribe(t -> {
 			System.out.println(t);
 		}));
+		
+		Observable<String> y = new CommandHelloWorld("World").toObservable();
+		y.subscribe(t -> System.out.println(t));
 	}
 
 }
