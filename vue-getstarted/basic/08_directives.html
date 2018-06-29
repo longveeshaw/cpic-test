@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue Directives</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <a v-bind:href="url">Go Go Go ...</a>
+    <button v-on:click='setBaiduLink'>Baidu</button>
+    <button v-on:click='setVueLink'>Vue</button>
+  </div>
+
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        url: 'https://cn.vuejs.org/v2/guide/syntax.html'
+      }, methods: {
+        setBaiduLink: function () {
+          this.url = "https://www.baidu.com"
+        },
+        setVueLink: function () {
+          this.url = "https://cn.vuejs.org/v2/guide/syntax.html"
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
